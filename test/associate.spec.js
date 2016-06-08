@@ -51,4 +51,9 @@ describe('associate', () => {
       type: 'DELETE'
     }, 'b'))).to.eql({a: 0})
   })
+  it('should delete all values', () => {
+    expect(reducer({a: 0, b: 2}, {
+      type: 'DELETE'
+    })).to.eql({})
+  })
 })
