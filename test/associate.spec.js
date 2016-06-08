@@ -19,7 +19,8 @@ describe('associate', () => {
       type: 'INIT'
     })).to.eql({})
   })
-  if('should add a state by the key', () => {
+
+  it('should add a state by the key', () => {
     expect(reducer({}, attachKey({
       type: 'INIT'
     }, 'a'))).to.eql({a: 0})
@@ -28,17 +29,20 @@ describe('associate', () => {
       payload: 3
     }, 'b'))).to.eql({a: 0, b: 3})
   })
+
   it('should not add a state by the key', () => {
     expect(reducer({a: 0}, attachKey({
       type: 'DELETE'
     }, 'b'))).to.eql({a: 0})
   })
+
   it('should change the value properly', () => {
     expect(reducer({a: 0, b: 2}, attachKey({
       type: 'ADD',
       payload: 3
     }, 'b'))).to.eql({a: 0, b: 5})
   })
+
   it('should not update the state', () => {
     const state = {a: 0, b: 2}
     expect(reducer(state, attachKey({
@@ -46,11 +50,13 @@ describe('associate', () => {
       payload: 0
     }, 'b'))).to.equal(state)
   })
+
   it('should delete a state by the key', () => {
     expect(reducer({a: 0, b: 2}, attachKey({
       type: 'DELETE'
     }, 'b'))).to.eql({a: 0})
   })
+
   it('should delete all values', () => {
     expect(reducer({a: 0, b: 2}, {
       type: 'DELETE'

@@ -7,19 +7,21 @@ const associate = (reducer) => {
     const meta = action.meta ? action.meta[META_KEY] : undefined
     if (meta) {
       const { key } = meta
-      const previousStateForKey = state.hasOwnProperty(key)
+      const hasKey = state.hasOwnProperty(key)
+      const previousStateForKey = hasKey
         ? state[key]
         : reducer(undefined, { type: INIT })
       const nextStateForKey = reducer(previousStateForKey, action)
-      if (nextStateForKey !== previousStateForKey) {
+      if (nextStateForKey !== previousStateForKey || !hasKey) {
         let nextState = {}
         const keys = Object.keys(state)
         for (let i = 0; i < keys.length; i ++) {
           if (keys[i] != key) {
             nextState[keys[i]] = state[keys[i]]
-          } else if (nextStateForKey !== DELETE) {
-            nextState[keys[i]] = nextStateForKey
           }
+        }
+        if (nextStateForKey !== DELETE) {
+          nextState[key] = nextStateForKey
         }
         return nextState
       } else {
