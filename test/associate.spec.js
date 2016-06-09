@@ -1,3 +1,5 @@
+import { _extend as extend } from 'util'
+
 import { expect } from 'chai'
 
 import { associate, attachKey, DELETE } from '../src/index'
@@ -8,6 +10,8 @@ const reducer = associate((state = 0, { type, payload }) => {
       return state + payload
     case 'DELETE':
       return DELETE
+    case 'FAKE_DELETE':
+      return extend({}, DELETE)
     default:
       return state
   }
@@ -61,5 +65,14 @@ describe('associate', () => {
     expect(reducer({a: 0, b: 2}, {
       type: 'DELETE'
     })).to.eql({})
+  })
+
+  it('should not delete state by fake DELETE', () => {
+    expect(reducer({a: 0, b: 2}, attachKey({
+      type: 'FAKE_DELETE'
+    }, 'b'))).to.eql({a: 0, b: DELETE})
+    expect(reducer({a: 0, b: 2}, {
+      type: 'FAKE_DELETE'
+    })).to.eql({a: DELETE, b: DELETE})
   })
 })
