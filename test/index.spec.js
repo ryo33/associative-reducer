@@ -2,11 +2,13 @@ import { expect } from 'chai'
 
 import { associate, attachKey, DELETE } from '../src/index'
 
-describe('index', () => {
-  it('should be able to run the example properly', () => {
+describe('example', () => {
+  it('should be able to work properly', () => {
     const reducer = associate((state = 0, action) => {
       const { type, payload } = action
       switch (type) {
+        case 'INIT_TO':
+          return payload
         case 'ADD':
           return state + payload
         case 'DELETE':
@@ -14,7 +16,7 @@ describe('index', () => {
         default:
           return state
       }
-    })
+    }, ['INIT', 'INIT_TO'])
 
     let state
     const dispatch = (action) => state = reducer(state, action)
@@ -25,10 +27,10 @@ describe('index', () => {
     dispatch(attachKey({ type: 'INIT' }, 'a'))
     expect(state).to.eql({ a: 0 })
 
-    dispatch(attachKey({ type: 'ADD', payload: 3 }, 'a'))
-    expect(state).to.eql({ a: 3 })
+    dispatch(attachKey({ type: 'INIT_TO', payload: 5 }, 'b'))
+    expect(state).to.eql({ a: 0, b: 5 })
 
-    dispatch(attachKey({ type: 'ADD', payload: 5 }, 'b'))
+    dispatch(attachKey({ type: 'ADD', payload: 3 }, 'a'))
     expect(state).to.eql({ a: 3, b: 5 })
 
     dispatch({ type: 'ADD', payload: 1 })

@@ -22,6 +22,8 @@ import { associate, attachKey, DELETE } from 'associative-reducer'
 const reducer = associate((state = 0, action) => {
   const { type, payload } = action
   switch (type) {
+    case 'INIT_TO':
+      return payload
     case 'ADD':
       return state + payload
     case 'DELETE':
@@ -29,31 +31,31 @@ const reducer = associate((state = 0, action) => {
     default:
       return state
   }
-})
+}, ['INIT', 'INIT_TO'])
 
 let state
 const dispatch = (action) => state = reducer(state, action)
 
 dispatch({ type: 'INIT' })
-// state -> {}
+expect(state).to.eql({})
 
 dispatch(attachKey({ type: 'INIT' }, 'a'))
-// state -> { a: 0 }
+expect(state).to.eql({ a: 0 })
+
+dispatch(attachKey({ type: 'INIT_TO', payload: 5 }, 'b'))
+expect(state).to.eql({ a: 0, b: 5 })
 
 dispatch(attachKey({ type: 'ADD', payload: 3 }, 'a'))
-// state -> { a: 3 }
-
-dispatch(attachKey({ type: 'ADD', payload: 5 }, 'b'))
-// state -> { a: 3, b: 5 }
+expect(state).to.eql({ a: 3, b: 5 })
 
 dispatch({ type: 'ADD', payload: 1 })
-// state -> { a: 4, b: 6 }
+expect(state).to.eql({ a: 4, b: 6 })
 
 dispatch(attachKey({ type: 'DELETE' }, 'b'))
-// state -> { a: 4 }
+expect(state).to.eql({ a: 4 })
 
 dispatch({ type: 'DELETE' })
-// state -> {}
+expect(state).to.eql({})
 ```
 
 ## Installation
@@ -61,9 +63,13 @@ dispatch({ type: 'DELETE' })
 
 ## API
 
-### `associate(reducer) => wrappedReducer`
+### `associate(reducer, newKeyAction) => wrappedReducer`
 - `reducer` A source reducer  
 When a reducer returns `DELETE`, the state for the key will be deleted.
+- `newKeyAction: string | array | (type) => bool`  
+  - `string` New key will be added if `action.type` equals to `newKeyAction`
+  - `array` New key will be added if `newKeyAction` contains `action.type`
+  - `(type) => bool` New key will be added if the result of `newKeyAction(action.type)` is `true`
 - `wrappedReducer` A reducer which returns associative state
 
 ### `attachKey(action, key) => newAction`

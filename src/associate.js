@@ -2,12 +2,25 @@ const INIT = '@@associative-reducer/INIT' // Action
 const META_KEY = '@@associative-reducer/meta'
 const DELETE = {'@@associative-reducer/DELETE': true}
 
-const associate = (reducer) => {
+const associate = (reducer, newKeyAction) => {
+  const isNewKeyAction = (type) => {
+    if (typeof newKeyAction === 'function') {
+      return newKeyAction(type)
+    } else if (Array.isArray(newKeyAction)) {
+      return newKeyAction.indexOf(type) != -1
+    } else {
+      return newKeyAction == type
+    }
+  }
+
   return (state = {}, action) => {
     const meta = action.meta ? action.meta[META_KEY] : undefined
     if (meta) {
       const { key } = meta
       const hasKey = state.hasOwnProperty(key)
+      if (!hasKey && !isNewKeyAction(action.type)) {
+        return state
+      }
       const previousStateForKey = hasKey
         ? state[key]
         : reducer(undefined, { type: INIT })
