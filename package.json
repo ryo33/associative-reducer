@@ -35,7 +35,5 @@
     "url": "https://github.com/ryo33/associative-reducer/issues"
   },
   "homepage": "https://github.com/ryo33/associative-reducer#readme",
-  "dependencies": {
-    "is-valid-redux-reducer": "^1.0.1"
-  }
+  "dependencies": {}
 }
