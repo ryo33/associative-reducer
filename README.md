@@ -67,9 +67,9 @@ expect(state).to.eql({})
 - `reducer` A source reducer  
 When a reducer returns `DELETE`, the state for the key will be deleted.
 - `newKeyAction: string | array | (type) => bool`  
-  - `string` New key will be added if `action.type` equals to `newKeyAction`
-  - `array` New key will be added if `newKeyAction` contains `action.type`
-  - `(type) => bool` New key will be added if the result of `newKeyAction(action.type)` is `true`
+  - `string` A new key will be added if `action.type` equals to `newKeyAction`
+  - `array` A new key will be added if `newKeyAction` contains `action.type`
+  - `(type) => bool` A new key will be added if the result of `newKeyAction(action.type)` is `true`
 - `wrappedReducer` A reducer which returns associative state
 
 ### `attachKey(action, key) => newAction`
