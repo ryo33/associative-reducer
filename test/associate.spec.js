@@ -124,4 +124,13 @@ describe('associate', () => {
     const associated = associate(creator)("key", "a", "b", "c")
     expect(associated).to.deep.equal(attached)
   })
+
+  it('shoult copy statics of the action creator to the wrapped one', () => {
+    const creator = () => ({})
+    creator.static1 = "a"
+    creator.static2 = "b"
+    const associated = associate(creator)
+    expect(associated.static1).to.be.equal("a")
+    expect(associated.static2).to.be.equal("b")
+  })
 })

@@ -1,6 +1,6 @@
 {
   "name": "associative-reducer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Make reducers associative",
   "main": "./lib/index.js",
   "files": [
@@ -35,5 +35,7 @@
     "url": "https://github.com/ryo33/associative-reducer/issues"
   },
   "homepage": "https://github.com/ryo33/associative-reducer#readme",
-  "dependencies": {}
+  "dependencies": {
+    "core-js": "^2.4.1"
+  }
 }

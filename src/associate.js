@@ -1,4 +1,6 @@
 import attachKey from './attach_key'
+import 'core-js/fn/object/keys'
+import 'core-js/fn/object/assign'
 
 const INIT = '@@associative-reducer/INIT' // Action
 const META_KEY = '@@associative-reducer/meta'
@@ -63,9 +65,10 @@ const associate = (reducer, newKeyAction) => {
   } else {
     // Action Creator
     const actionCreator = reducer
-    return function(key, ...args) {
+    const wrappedActionCreator = (key, ...args) => {
       return attachKey(actionCreator(...args), key)
     }
+    return Object.assign(wrappedActionCreator, actionCreator)
   }
 }
 
