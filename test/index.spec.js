@@ -17,29 +17,39 @@ describe('example', () => {
           return state
       }
     }, ['INIT', 'INIT_TO'])
-
     let state
     const dispatch = (action) => state = reducer(state, action)
 
-    dispatch({ type: 'INIT' })
+    const init = () => ({ type: 'INIT' })
+    const initTo = (value) => ({ type: 'INIT_TO', payload: value })
+    const add = (value) => ({ type: 'ADD', payload: value })
+    const del = ()  => ({ type: 'DELETE' })
+    const associatedAdd = associate(add)
+
+    // associatedAdd(key, value) is the same as attachKey(add(value), key)
+
+    dispatch(init())
     expect(state).to.eql({})
 
-    dispatch(attachKey({ type: 'INIT' }, 'a'))
+    dispatch(attachKey(init(), 'a'))
     expect(state).to.eql({ a: 0 })
 
-    dispatch(attachKey({ type: 'INIT_TO', payload: 5 }, 'b'))
+    dispatch(attachKey(initTo(5), 'b'))
     expect(state).to.eql({ a: 0, b: 5 })
 
-    dispatch(attachKey({ type: 'ADD', payload: 3 }, 'a'))
+    dispatch(attachKey(add(3), 'a'))
     expect(state).to.eql({ a: 3, b: 5 })
 
-    dispatch({ type: 'ADD', payload: 1 })
-    expect(state).to.eql({ a: 4, b: 6 })
+    dispatch(associatedAdd('b', 1))
+    expect(state).to.eql({ a: 3, b: 6 })
 
-    dispatch(attachKey({ type: 'DELETE' }, 'b'))
+    dispatch(add(1))
+    expect(state).to.eql({ a: 4, b: 7 })
+
+    dispatch(attachKey(del(), 'b'))
     expect(state).to.eql({ a: 4 })
 
-    dispatch({ type: 'DELETE' })
+    dispatch(del())
     expect(state).to.eql({})
   })
 })

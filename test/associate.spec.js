@@ -117,4 +117,11 @@ describe('associate', () => {
       type: 'FAKE_DELETE'
     })).to.eql({a: DELETE, b: DELETE})
   })
+
+  it('should wrap an action creator', () => {
+    const creator = (arg1, arg2, arg3) => ({ arg1, arg2, arg3 })
+    const attached = attachKey(creator("a", "b", "c"), "key")
+    const associated = associate(creator)("key", "a", "b", "c")
+    expect(associated).to.deep.equal(attached)
+  })
 })
